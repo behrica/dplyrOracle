@@ -1,0 +1,21 @@
+---
+title: "README"
+author: "Bjarki and Einar"
+date: "7 11 2016"
+output: 
+  html_document: 
+    keep_md: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      message = FALSE)
+```
+
+```{r}
+library(dplyr)
+library(dplyrOracle)
+oracle_tables("fiskar")
+oracle_variables("fiskar.stodvar")
+```
+

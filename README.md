@@ -1,172 +1,112 @@
-# dplyrOracle
-dplyrOracle is a R package which extends dplyr by providing Oracle backend.
-Currently it is experimental and it is probably not a good idea to use
-it for any critical tasks.
+# README
+Bjarki and Einar  
+7 11 2016  
 
-Please let me know if you would like to contribute to the development. I believe
-there are many users who would love to use dplyr with Oracle.
 
-Besides adding Oracle as a dplyr backend, this package provides few other
-functions, mainly to save some typing during interactive analysis. These are:
 
- - `db_remove_tables` - remove multiple tables at once, skipping non-existing
- - `tbls` - create multiple tables in global environment. Use with care as it
- overwrites any existing variables where name is the same as table name.
- - `union all` - union all operator
 
-Read the following to understand what works and what does not. 
-`my_db` is an object created by `src_oracle`. Let me know if you know how to 
-fix something :)
+```r
+library(dplyr)
+library(dplyrOracle)
+oracle_tables("fiskar")
+```
 
 ```
-# Copy lahman data
-lahman_oracle(my_db)
+## 
+##    owner  table             space rows     analyzed           
+## 1  fiskar vindhradi         nyt         13 2014-01-08 22:00:13
+## 2  fiskar vindatt           nyt         18 2012-10-27 12:26:09
+## 3  fiskar vedur             nyt         10 2012-10-27 12:26:09
+## 4  fiskar valkvarnir        nyt      19234 2015-08-28 22:01:15
+## 5  fiskar utibu             nyt          7 2012-10-27 12:26:09
+## 6  fiskar umhverfi          nyt     183208 2016-05-04 22:01:37
+## 7  fiskar typa              nyt         17 2012-10-27 12:22:31
+## 8  fiskar tunfisk_faeda     nyt        310 2012-10-27 12:27:26
+## 9  fiskar tuna_hardir       nyt       7857 2012-10-27 12:27:56
+## 10 fiskar tuna_ferskir      nyt         62 2012-10-27 12:27:26
+## 11 fiskar tuna_brad         nyt       3975 2012-10-27 12:27:26
+## 12 fiskar togstodvar        nyt     236278 2015-11-04 22:01:19
+## 13 fiskar togeyktir         nyt         12 2012-10-27 12:26:08
+## 14 fiskar synaflokkar       nyt         35 2012-10-27 12:26:08
+## 15 fiskar stodvar           nyt     323711 2016-09-26 22:01:28
+## 16 fiskar stada_stodva      nyt          8 2015-08-26 22:01:10
+## 17 fiskar stada_lengdir     nyt          5 2012-10-27 12:26:08
+## 18 fiskar stada_kvarnir     nyt         15 2013-12-11 22:02:13
+## 19 fiskar spurn             nyt          3 2012-10-27 12:26:07
+## 20 fiskar sky               nyt         10 2012-10-27 12:26:07
+## 21 fiskar skikar            nyt        266 2012-10-27 12:26:07
+## 22 fiskar sjor              nyt         10 2012-10-27 12:26:07
+## 23 fiskar oskjur            nyt     291673 2015-11-20 22:01:18
+## 24 fiskar numer             nyt    1068092 2015-05-20 22:01:22
+## 25 fiskar melting_kvarna    nyt          3 2012-10-27 12:27:26
+## 26 fiskar melting_bradar    nyt          3 2012-10-27 12:27:26
+## 27 fiskar linir             nyt      33412 2012-10-27 12:28:34
+## 28 fiskar l_hafnir          nyt         92 2012-10-27 12:26:07
+## 29 fiskar lengdir           nyt   11847756 2016-05-04 22:01:28
+## 30 fiskar leidr_stodvar     nyt      64846 2014-01-08 22:00:21
+## 31 fiskar leidr_numer       nyt     230179 2015-12-01 22:01:41
+## 32 fiskar leidr_lengdir     nyt    2266635 2012-10-27 12:31:23
+## 33 fiskar leidr_kvarnir     nyt    1560670 2014-01-17 22:01:25
+## 34 fiskar leidangrar        nyt       8795 2014-05-05 22:00:21
+## 35 fiskar kynthroski        nyt       2769 2012-10-27 12:27:26
+## 36 fiskar kyn               nyt          2 2012-10-27 12:27:25
+## 37 fiskar kvarnir           nyt    4220336 2015-10-28 22:01:48
+## 38 fiskar kvarnaflokkar     nyt          6 2012-10-27 12:26:07
+## 39 fiskar innyflafita       nyt          4 2012-10-27 12:26:07
+## 40 fiskar innslatt_status   nyt         17 2012-10-27 12:26:07
+## 41 fiskar ices_tegundir     nyt         21 2012-10-27 12:26:07
+## 42 fiskar hafis             nyt         10 2012-10-27 12:26:07
+## 43 fiskar g_vikmork         nyt        249 2012-10-27 12:26:07
+## 44 fiskar g_trossur         nyt        222 2012-10-27 12:26:07
+## 45 fiskar flokkar_sendingar nyt      13527 2012-10-27 12:28:40
+## 46 fiskar flokkar           nyt          0 2012-10-27 08:42:01
+## 47 fiskar beita             nyt          2 2012-10-27 12:27:25
+```
 
-# Here we'll use the Lahman database: to create your own local copy,
-# create a local database called "lahman", or tell lahman_oracle() how to
-# a database that you can write to
+```r
+oracle_variables("fiskar.stodvar")
+```
 
-lahman_p <- my_db
-# Methods -------------------------------------------------------------------
-batting <- tbl(lahman_p, "Batting")
-dim(batting)
-colnames(batting)
-head(batting)
-glimpse(batting)
+```
+## 
+##    name            Sclass    type     len  precision scale nullOK
+## 1  synis_id        integer   number     NA 6            0  FALSE 
+## 2  leidangur       character varchar2   40 0            0   TRUE 
+## 3  dags            POSIXct   date       NA 0            0   TRUE 
+## 4  skip            integer   number     NA 4            0   TRUE 
+## 5  stod            integer   number     NA 5            0   TRUE 
+## 6  reitur          integer   number     NA 4            0   TRUE 
+## 7  smareitur       integer   number     NA 1            0   TRUE 
+## 8  kastad_n_breidd integer   number     NA 6            0   TRUE 
+## 9  kastad_v_lengd  integer   number     NA 6            0   TRUE 
+## 10 hift_n_breidd   integer   number     NA 6            0   TRUE 
+## 11 hift_v_lengd    integer   number     NA 6            0   TRUE 
+## 12 dypi_kastad     integer   number     NA 4            0   TRUE 
+## 13 dypi_hift       integer   number     NA 4            0   TRUE 
+## 14 veidarfaeri     integer   number     NA 3            0   TRUE 
+## 15 moskvastaerd    integer   number     NA 4            0   TRUE 
+## 16 grandaralengd   integer   number     NA 3            0   TRUE 
+## 17 heildarafli     integer   number     NA 7            0   TRUE 
+## 18 londunarhofn    integer   number     NA 3            0   TRUE 
+## 19 skiki           integer   number     NA 2            0   TRUE 
+## 20 fjardarreitur   integer   number     NA 3            0   TRUE 
+## 21 snt             POSIXct   date       NA 0            0   TRUE 
+## 22 snn             character varchar2   60 0            0   TRUE 
+## 23 sbt             POSIXct   date       NA 0            0   TRUE 
+## 24 sbn             character varchar2   60 0            0   TRUE 
+## 25 hnattstada      integer   number     NA 1            0   TRUE 
+## 26 landsyni        integer   number     NA 2            0   TRUE 
+## 27 aths            character varchar2  320 0            0   TRUE 
+## 28 stada_stodvar   integer   number     NA 2            0   TRUE 
+## 29 net_nr          integer   number     NA 2            0   TRUE 
+## 30 synaflokkur     integer   number     NA 3            0   TRUE 
+## 31 veidisvaedi     character varchar2  160 0            0   TRUE 
+## 32 hitamaelir_id   numeric   number     NA 0         -127   TRUE 
+## 33 maelingarmenn   character varchar2 4000 0            0   TRUE 
+## 34 veidarfaeri_id  numeric   number     NA 0         -127   TRUE 
+## 35 tog_aths        character varchar2 2000 0            0   TRUE 
+## 36 medferd_afla    integer   number     NA 2            0   TRUE 
+## 
+##    323711 rows on 2016-09-26 22:01:28
+```
 
-# Data manipulation verbs ---------------------------------------------------
-filter(batting, yearID > 2005, G > 130)
-filter(batting, between(yearID, 2005, 2008), G > 130)
-filter(batting, between(yearID, 2005, 2008), G > 130)
-
-
-select(batting, playerID:lgID)
-arrange(batting, playerID, desc(yearID))
-summarise(batting, G = mean(G), n = n())
-
-summarise(group_by(batting, yearID), 
-          G = mean(G), 
-          n = n(), 
-          s = sd(G), 
-          c = cor(G, AB), 
-          cov = cov(G, AB),
-          med = median(G)
-)
-
-
-mutate(batting, rbi2 = if(is.null(AB)) 1.0 * R / AB else 0)
-
-# note that all operations are lazy: they don't do anything until you
-# request the data, either by `print()`ing it (which shows the first ten
-# rows), by looking at the `head()`, or `collect()` the results locally.
-
-system.time(recent <- filter(batting, yearID > 2010))
-system.time(collect(recent))
-
-# Group by operations -------------------------------------------------------
-# To perform operations by group, create a grouped object with group_by
-players <- group_by(batting, playerID)
-group_size(players)
-
-x <- filter(players, AB == max(AB))
-x %>% show_query()
-
-
-summarise(players, mean_g = mean(G), best_ab = max(AB))
-best_year <- filter(players, AB == max(AB) | G == max(G))
-best_year %>% show_query()
-best_year
-
-
-progress <- mutate(players,
-                   cyear = yearID - min(yearID) + 1,
-                   ab_rank = rank(desc(AB)),
-                   cumulative_ab = order_by(yearID, cumsum(AB)))
-
-# When you group by multiple level, each summarise peels off one level
-per_year <- group_by(batting, playerID, yearID)
-stints <- summarise(per_year, stints = max(stint))
-filter(stints, stints > 3)
-summarise(stints, max(stints))
-out <- mutate(stints, x = order_by(yearID, cumsum(stints)))
-out
-
-# Joins ---------------------------------------------------------------------
-player_info <- select(tbl(lahman_p, "Master"), playerID, birthYear)
-hof <- select(filter(tbl(lahman_p, "HallOfFame"), inducted == "Y"),
-              playerID, votedBy, category)
-
-# Match players and their hall of fame data
-inner_join(player_info, hof)
-# Keep all players, match hof data where available
-left_join(player_info, hof)
-# Find only players in hof
-semi_join(player_info, hof)
-# Find players not in hof
-anti_join(player_info, hof)
-
-# Arbitrary SQL -------------------------------------------------------------
-# You can also provide sql as is, using the sql function:
-batting2008 <- tbl(lahman_p,
-                   sql('SELECT * FROM "Batting" WHERE "yearID" = 2008'))
-batting2008
-
-
-##################### COLLECT, COLLAPSE
-remote <- select(filter(batting, yearID > 2010 && stint == 1), playerID:H)
-remote2 <- collapse(remote)
-cached <- compute(remote)
-local  <- collect(remote)
-
-##################### DBI
-
-#db_list_tables(con)
-db_list_tables(my_db$con)
-
-#db_create_table(con, table, types, temporary = FALSE, ...)
-db_create_table(my_db$con, 'DPLYR_TEST', c(a = 'number',  b = 'varchar(20)'))
-
-#db_has_table(con, table)
-db_has_table(my_db$con, 'DPLYR_TEST')
-
-#db_data_type(con, fields)
-db_data_type(my_db$con, iris)
-
-#db_save_query(con, sql, name, temporary = TRUE, ...)
-db_save_query(my_db$con, sql('select "a", "b", "a"+2 as c from DPLYR_TEST'), temporary = FALSE,
-              name = dplyr:::random_table_name())
-
-#db_begin(con, ...)
-db_begin(my_db$con)
-
-#db_commit(con, ...)
-db_commit(my_db$con)
-
-#db_rollback(con, ...)
-db_rollback(my_db$con)
-
-#db_insert_into(con, table, values, ...)
-df <- data.frame(a = runif(5), b = LETTERS[1:5])
-db_insert_into(my_db$con, 'DPLYR_TEST', df)
-tbl(my_db, 'DPLYR_TEST')
-
-#db_create_index(con, table, columns, name = NULL, ...)
-db_create_index(my_db$con, 'DPLYR_TEST', 'a')
-
-#db_analyze(con, table, ...)
-# tbd....
-
-#db_explain(con, sql, ...)
-# works, but does not return explain plan (it is stored in plan_table)
-# http://docs.oracle.com/cd/B10500_01/server.920/a96533/ex_plan.htm
-db_explain(my_db$con, sql('select * from DPLYR_TEST'))
-
-#db_query_fields(con, sql, ...)
-db_query_fields(my_db$con, sql("DPLYR_TEST"))
-
-#db_query_rows(con, sql, ...)
-db_query_rows(my_db$con, sql('select * from DPLYR_TEST'))
-
-#db_drop_table(con, table, force = FALSE, ...)
-db_drop_table(my_db$con, 'DPLYR_TEST')
-db_has_table(my_db$con, 'DPLYR_TEST')
