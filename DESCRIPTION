@@ -9,8 +9,6 @@ Depends:
 Imports:
     utils,
     dplyr,
-    DBI (>= 0.3.1),
-    ROracle,
     assertthat
 Description: Allows dplyr to work with oracle
 License: GPL
